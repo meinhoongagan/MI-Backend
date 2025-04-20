@@ -32,6 +32,16 @@ const deleteTestimonial = async (req, res) => {
   }
 };
 
+//Get non approved Testimonials
+const getNonApprovedTestimonials = async (req, res) => {
+  try {
+    const testimonials = await Testimonial.find({ isApproved: false });
+    res.status(200).json(testimonials);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // PUT /api/testimonials/:id/approve - Approve testimonial (Admin only)
 const approveTestimonial = async (req, res) => {
   try {
@@ -50,6 +60,7 @@ const approveTestimonial = async (req, res) => {
 module.exports = {
   createTestimonial,
   getApprovedTestimonials,
+  getNonApprovedTestimonials,
   deleteTestimonial,
   approveTestimonial,
 };

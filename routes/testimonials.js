@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   createTestimonial,
   getApprovedTestimonials,
+  getNonApprovedTestimonials,
   deleteTestimonial,
   approveTestimonial
 } = require('../controllers/testimonials.controllers.js');
@@ -17,5 +18,6 @@ router.get('/', getApprovedTestimonials);
 // Admin
 router.delete('/:id', isAdmin, deleteTestimonial);
 router.put('/:id/approve', isAdmin, approveTestimonial);
+router.get('/non-approved', isAdmin, getNonApprovedTestimonials);
 
 module.exports = router;
