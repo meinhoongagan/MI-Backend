@@ -8,6 +8,7 @@ const testimonialRoutes = require('./routes/testimonials.js')
 const testResultRoutes = require('./routes/test-results.js')
 const academicResultRoutes = require('./routes/academic-results.js')
 const notificationRoutes = require('./routes/notifications.js')
+const user = require('./routes/user.js')
 
 app.use(express.json());
 app.use(cors())
@@ -24,6 +25,7 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/test-results', testResultRoutes);
 app.use('/api/academic-results', academicResultRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/user', user);
 
 app.listen(3000, () => {
   db(); // Connect to the database
