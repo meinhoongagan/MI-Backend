@@ -26,11 +26,40 @@ const deleteNotification = async (req, res) => {
 const getNotifications = async (req, res) => {
   try {
     const userId = req.headers['x-user-id'];
+    
+    // Get notifications that are either global (user: null) or specific to this user
+    // Also filter out expired notifications
     const notifications = await Notification.find({
-      $or: [{ user: null }, { user: userId }]
+      $or: [{ user: null }, { user: userId }],
+      $or: [
+        { expiresAt: { $exists: false } }, // No expiry date
+        { expiresAt: null },               // Null expiry date
+        { expiresAt: { $gt: new Date() } } // Not expired yet
+      ]
     }).sort({ createdAt: -1 });
-
+    
     res.status(200).json(notifications);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Mark notification as read
+const markNotificationAsRead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const notification = await Notification.findByIdAndUpdate(
+      id,
+      { isRead: true },
+      { new: true }
+    );
+    
+    if (!notification) {
+      return res.status(404).json({ message: 'Notification not found' });
+    }
+    
+    res.status(200).json(notification);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -39,5 +68,6 @@ const getNotifications = async (req, res) => {
 module.exports = {
   addNotification,
   deleteNotification,
-  getNotifications
+  getNotifications,
+  markNotificationAsRead
 };

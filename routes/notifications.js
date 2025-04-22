@@ -4,7 +4,8 @@ const router = express.Router();
 const {
   addNotification,
   deleteNotification,
-  getNotifications
+  getNotifications,
+  markNotificationAsRead
 } = require('../controllers/notifications.controllers.js');
 
 const { isAdmin, isUser } = require('../middleware/userAuth.js');
@@ -13,7 +14,8 @@ const { isAdmin, isUser } = require('../middleware/userAuth.js');
 router.post('/', isAdmin, addNotification);
 router.delete('/:id', isAdmin, deleteNotification);
 
-// User route
+// User routes
 router.get('/', isUser, getNotifications);
+router.patch('/:id', isUser, markNotificationAsRead);
 
 module.exports = router;
